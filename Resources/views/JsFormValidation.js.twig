@@ -27,8 +27,6 @@ var jsfv = new function () {
 
     function checkError(field, checkFunction, parameters, value) {
         field = jsfv.id(field);
-        // Remove old errors of the field
-        {% block removeErrors %}{% spaceless %}jsfv.removeErrors(field);{% endspaceless %}{% endblock %}
         // Check the value
         errorMessage = checkFunction((value === undefined ? field : value), parameters);
         {# Notice! Block getVal was refused since 2.1 version.
@@ -92,6 +90,9 @@ var jsfv = new function () {
         check_{{ fieldName }}: function() {
             var gv;
             result = true;
+            // Remove old errors of the field
+            {% block removeErrors %}{% spaceless %}jsfv.removeErrors('#{{ fieldName }}');{% endspaceless %}{% endblock %}
+        
 {% for constraint in constraints %}
             result = result && checkError('{{ fieldName }}', {{ constraint.name }}, {{ constraint.parameters|raw }} );
 {% endfor %}
